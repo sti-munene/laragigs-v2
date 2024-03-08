@@ -6,78 +6,65 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="images/favicon.ico" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        laravel: "#ef3b2d",
-                    },
-                },
-            },
-        };
-    </script>
+    @vite('resources/css/app.css')
+    @vite('resources/css/app.js')
     <title>LaraGigs | Find Laravel Jobs & Projects</title>
 </head>
 
-<body class="mb-48">
-    <nav class="flex justify-between items-center mb-4">
-        <a href="/"><img class="w-24" src="{{ asset('images/logo.png') }}" alt="" class="logo" /></a>
+<body>
+   <header class="bg-white border-b border-slate-100 fixed top-0 left-0 w-full z-50">
+        <x-container>
+            <nav class="flex justify-between items-center h-16">
+                <a href="/" class="text-3xl font-medium hover:text-primary" >
+                    Laragigs
+                </a>
 
-        <ul class="flex space-x-6 mr-6 text-lg">
+                <ul class="flex space-x-6 items-center">
+                    @auth
+                    <!-- Authenticated user links -->
+                    <li>
+                        <span>Welcome {{auth()->user()->name }}</span>
+                    </li>
 
-            @auth
-            <!-- auth links -->
-            <li>
-                <span>Welcome {{auth()->user()->name }}</span>
-            </li>
+                    <li>
+                        <form class="inline" method='POST' action="/logout">
+                            @csrf
+                            <x-button type="submit">Logout</x-button>
+                        </form>
 
-            <li>
-                <form class="inline" method='POST' action="/logout">
-                    @csrf
-                    <button type="submit">Logout</button>
-                </form>
+                    </li>
 
-            </li>
+                    @else
+                    <!-- Guest links -->
+                    <li>
+                        <x-link href="/register">Register</x-link>
+                    </li>
+                    <li>
+                        <x-button class="bg-primary rounded-md" href="/login">Login</x-button>
+                    </li>
+                    @endauth
 
-            @else
-
-
-
-            <!-- guest links -->
-            <li>
-                <a href="/register" class="hover:text-laravel">Register</a>
-            </li>
-
-
-            <li>
-                <a href="/login" class="hover:text-laravel">
-                    Login</a>
-            </li>
-            @endauth
-
-        </ul>
-    </nav>
+                </ul>
+            </nav>
+        </x-container>
+    </header>
 
 
     <x-flash-message />
 
-    <main>
+    <main class="mt-16">
         <!-- View Output  -->
-        <!-- @yield('content') -->
-
+        {{-- @yield('content') --}}
         {{ $slot }}
     </main>
 
-    <footer class="fixed bottom-0 left-0 w-full flex items-center justify-start font-bold bg-laravel text-white h-24 mt-24 opacity-90 md:justify-center">
-        <p class="ml-2">Copyright &copy; 2022, All Rights reserved</p>
-        <a href="/listings/create" class="absolute top-1/3 right-10 bg-black text-white py-2 px-5">Post Job</a>
+    <footer class="w-full flex items-center justify-start font-bold bg-black text-white text-current h-24">
+        <x-container>
+            <div class="flex items-center justify-between">
+                <p class="">Copyright &copy; {{date("Y")}}; All Rights reserved.</p>
+                <x-button href="/listings/create" class="bg-primary rounded-md text-white py-2 px-5">Post a Job</x-button>
+            </div>
+        </x-container>
     </footer>
 </body>
-
 </html>
