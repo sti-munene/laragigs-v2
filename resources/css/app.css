@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+    @apply h-10 w-fit px-3 flex items-center justify-center text-base font-medium;
+}
